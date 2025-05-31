@@ -1,10 +1,15 @@
 package com.github.Lososok.tokyometro.model;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 
 public class Line {
     private String name;
-    private ArrayList<Station> stations; // must be doubly linked list
+    private final LinkedList<Station> stations;
+
+    public Line(String name) {
+        this.name = name;
+        this.stations = new LinkedList<>();
+    }
 
     public String getName() {
         return this.name;
@@ -14,15 +19,34 @@ public class Line {
         this.name = name;
     }
 
-    public ArrayList<Station> getStations() {
+    public LinkedList<Station> getStations() {
         return this.stations;
     }
 
-    public void addStation(Station station) {
-        this.stations.add(station);
+    public void addStationFirst(Station station) {
+        this.stations.addFirst(station);
     }
 
-//    public Station findStation(String name) {
-//
-//    }
+    public void addStation(Integer index, Station station) {
+        this.stations.add(index, station);
+    }
+
+    public void addStation(Station station) {
+        this.stations.addLast(station);
+    }
+
+    public Integer getNumberOfStations() {
+        return this.stations.size();
+    }
+
+    public Integer findStation(String name) {
+        for (int index = 0; index < this.getNumberOfStations(); index++) {
+            if (this.stations.get(index).getName().equals(name)) { return index; }
+        }
+        return null;
+    }
+
+    public Station getStation(Integer index) {
+        return this.stations.get(index);
+    }
 }
