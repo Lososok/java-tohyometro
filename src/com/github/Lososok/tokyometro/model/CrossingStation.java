@@ -1,4 +1,38 @@
 package com.github.Lososok.tokyometro.model;
 
-public class CrossingStation {
+import java.util.Arrays;
+
+public class CrossingStation extends Station{
+    private final Station[] cross;
+
+    public CrossingStation(String name, Line line) {
+        super(name, line);
+        this.setType(Type.Crossing);
+        this.cross = new Station[3];
+    }
+
+    public Station[] getCross() {
+        return cross;
+    }
+
+    public boolean addCross(Station station) {
+        for (int index = 0; index < 3; index++) {
+            if (this.getCross()[index] == null) {
+                this.getCross()[index] = station;
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public String info() {
+        return getLine().getName() +
+                "line " + this.getType() +
+                "station " + this.getName() +
+                "with crosses: " + Arrays.toString(
+                        Arrays.stream(this
+                                        .getCross())
+                                        .map(Station::info)
+                                        .toArray());
+    }
 }

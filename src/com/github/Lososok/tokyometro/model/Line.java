@@ -49,4 +49,10 @@ public class Line {
     public Station getStation(Integer index) {
         return this.stations.get(index);
     }
+
+    public String toString() {
+        return "Line{" +
+                "name='" + name +
+                '}';
+    }
 }

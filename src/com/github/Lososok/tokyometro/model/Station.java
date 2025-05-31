@@ -1,12 +1,9 @@
 package com.github.Lososok.tokyometro.model;
 
-import java.util.Arrays;
-
 public abstract class Station {
     private String name;
     private Line line;
     private Type type;
-    private Station[] neighbors;
 
     public Station(String name, Line line) {
         this.name = name;
@@ -37,14 +34,6 @@ public abstract class Station {
         this.type = type;
     }
 
-    public Station[] getNeighbors() {
-        return this.neighbors;
-    }
-
-    public void setNeighbors(Station[] neighbors) {
-        this.neighbors = neighbors;
-    }
-
     public abstract String info();
 
     public String toString() {
@@ -52,7 +41,6 @@ public abstract class Station {
                 "name='" + name + '\'' +
                 ", line=" + line +
                 ", type=" + type +
-                ", neighbors=" + Arrays.toString(neighbors) +
                 '}';
     }
 }
