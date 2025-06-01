@@ -27,12 +27,9 @@ public class CrossingStation extends Station{
 
     public String info() {
         return getLine().getName() +
-                "line " + this.getType() +
-                "station " + this.getName() +
-                "with crosses: " + Arrays.toString(
-                        Arrays.stream(this
-                                        .getCross())
-                                        .map(Station::info)
-                                        .toArray());
+                " line " + this.getType() +
+                " station " + this.getName() +
+                " with crosses: " +
+                Arrays.toString(this.getCross()).replaceAll(", null", "");
     }
 }

@@ -8,7 +8,7 @@ public class NonCrossingStation extends Station {
 
     public String info() {
         return getLine().getName() +
-                "line " + this.getType() +
-                "station " + this.getName();
+                " line " + this.getType() +
+                " station " + this.getName();
     }
 }

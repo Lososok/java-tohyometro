@@ -1,6 +1,5 @@
 package com.github.Lososok.tokyometro.model;
 
-import java.util.Arrays;
 import java.util.HashMap;
 
 public class TransferHub extends Station{
@@ -16,23 +15,17 @@ public class TransferHub extends Station{
         return this.transfers;
     }
 
-    public boolean addTransfer(Station station, Line line) {
+    public void addTransfer(Station station, Line line) {
         if (this.transfers.size() < 3) {
             this.transfers.put(station, line);
-            return true;
         }
-        return false;
     }
 
     public String info() {
         return getLine().getName() +
-                "line " + this.getType() +
-                "station " + this.getName() +
-                "with transfers: " +
-                this.getTransfers().entrySet().stream()
-                        .map((stationLineEntry) ->
-                                stationLineEntry.getKey().toString() +
-                                        stationLineEntry.getValue().toString()
-                );
+                " line " + this.getType() +
+                " station " + this.getName() +
+                " with transfers: " +
+                this.getTransfers().keySet();
     }
 }

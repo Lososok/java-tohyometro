@@ -10,8 +10,8 @@ public class ApplicationServiceImpl implements ApplicationService{
         return false;
     }
 
-    public Station findStation(Station station, Line line) {
-        return null;
+    public Station findStation(Station station, Line line) {    // TODO: add find by trans station
+        return line.getStation(line.findStation(station.getName()));
     }
 
     public boolean checkDescriptions(ArrayList<Line> lines) {

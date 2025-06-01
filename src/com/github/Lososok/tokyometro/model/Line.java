@@ -52,7 +52,7 @@ public class Line {
 
     public String toString() {
         return "Line{" +
-                "name='" + name +
+                "name=" + name +
                 '}';
     }
 }
