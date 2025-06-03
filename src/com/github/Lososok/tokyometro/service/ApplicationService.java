@@ -7,6 +7,6 @@ import java.util.ArrayList;
 
 public interface ApplicationService {
     boolean editLineDescription(Line line);
-    Station findStation(Station station, Line line);
+    Station findStation(String station, Line line);
     boolean checkDescriptions(ArrayList<Line> lines);
 }

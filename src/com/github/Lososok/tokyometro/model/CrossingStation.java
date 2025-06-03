@@ -15,14 +15,13 @@ public class CrossingStation extends Station{
         return cross;
     }
 
-    public boolean addCross(Station station) {
+    public void addCross(Station station) {
         for (int index = 0; index < 3; index++) {
             if (this.getCross()[index] == null) {
                 this.getCross()[index] = station;
-                return true;
+                return;
             }
         }
-        return false;
     }
 
     public String info() {

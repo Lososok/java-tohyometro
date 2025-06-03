@@ -3,12 +3,13 @@ package test;
 import com.github.Lososok.tokyometro.model.*;
 import com.github.Lososok.tokyometro.service.ApplicationService;
 import com.github.Lososok.tokyometro.service.ApplicationServiceImpl;
-
+// TODO: хотя бы приличия ради добавить обработку исключений
 public class Test {
     private static final ApplicationService app = new ApplicationServiceImpl();
 
     public static void main(String[] args) {
         Test.addAndFindTest();
+        Test.findStationTest();
     }
 
     private static void addAndFindTest() {
@@ -70,5 +71,68 @@ public class Test {
         System.out.println(line3.getStation(line3.findStation("2")).info());
 
         System.out.println("-----------------------------");
+    }
+    // TODO: добавить чтение из файла конфигурации метро
+    // TODO: после этого нужно переделать тест, чтобы он соответствовал названию
+    private static void findStationTest() {
+        // чет не придумал как это нормально сделать сейчас
+
+
+        // ||||||||||                                       ||||||||||
+        // ||||||||||                                       ||||||||||
+        // \/\/\/\/\/ findStationTest.png -> как я вижу это \/\/\/\/\/
+        Line line1 = new Line("red"),
+                line2 = new Line("green"),
+                line3 = new Line("blue");
+
+
+        line1.addStation(new CrossingStation("abc", line1));
+        line1.addStation(new TransferHub("bac", line1));
+
+        line2.addStation(new TransferHub("cab", line2));
+        line2.addStation(new CrossingStation("bab", line2));
+
+        line3.addStation(new CrossingStation("bab", line3));
+        line3.addStation(new NonCrossingStation("deb", line3));
+        line3.addStation(new CrossingStation("abc", line3));
+
+        ((CrossingStation) app.findStation("abc", line1)).addCross(
+                                                                    app.findStation("abc", line3)
+        );
+        ((TransferHub) app.findStation("bac", line1)).addTransfer(
+                                                                    app.findStation("cab", line2),
+                                                                    app.findStation("cab", line2).getLine()
+        );
+        ((TransferHub) app.findStation("cab", line2)).addTransfer(
+                                                                    app.findStation("bac", line1),
+                                                                    app.findStation("bac", line1).getLine()
+        );
+        ((CrossingStation) app.findStation("bab", line2)).addCross(
+                                                                    app.findStation("bab", line3)
+        );
+        ((CrossingStation) app.findStation("bab", line3)).addCross(
+                                                                    app.findStation("bab", line2)
+        );
+        ((CrossingStation) app.findStation("abc", line3)).addCross(
+                                                                    app.findStation("abc", line1)
+        );
+
+        System.out.println(line1 + " " + line2 + " " + line3);
+
+        System.out.println("Normal");
+        System.out.println(app.findStation("abc", line1));
+        System.out.println(app.findStation("bac", line1));
+
+        System.out.println(app.findStation("cab", line2));
+        System.out.println(app.findStation("bab", line2));
+
+        System.out.println(app.findStation("abc", line3));
+        System.out.println(app.findStation("bab", line3));
+        System.out.println(app.findStation("deb", line3));
+
+        System.out.println("By transfer");
+
+        System.out.println(app.findStation("cab", line1));
+        System.out.println(app.findStation("bac", line2));
     }
 }

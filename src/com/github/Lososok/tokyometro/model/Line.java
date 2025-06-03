@@ -1,6 +1,9 @@
 package com.github.Lososok.tokyometro.model;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
+import java.util.stream.Collectors;
 
 public class Line {
     private String name;
@@ -53,6 +56,7 @@ public class Line {
     public String toString() {
         return "Line{" +
                 "name=" + name +
+                " stations=" + stations.stream().map(Station::getName).collect(Collectors.joining(", ")) +
                 '}';
     }
 }
