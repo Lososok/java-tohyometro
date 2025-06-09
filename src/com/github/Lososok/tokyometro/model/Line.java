@@ -1,7 +1,5 @@
 package com.github.Lososok.tokyometro.model;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.stream.Collectors;
 
