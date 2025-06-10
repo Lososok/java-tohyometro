@@ -3,13 +3,17 @@ package test;
 import com.github.Lososok.tokyometro.model.*;
 import com.github.Lososok.tokyometro.service.ApplicationService;
 import com.github.Lososok.tokyometro.service.ApplicationServiceImpl;
+
+import java.util.ArrayList;
+
 // TODO: хотя бы приличия ради добавить обработку исключений
 public class Test {
     private static final ApplicationService app = new ApplicationServiceImpl();
 
     public static void main(String[] args) {
-        Test.addAndFindTest();
-        Test.findStationTest();
+//        Test.addAndFindTest();
+//        Test.findStationTest();
+        Test.parseConfigTest("src/test/resources/1");
     }
 
     private static void addAndFindTest() {
@@ -134,5 +138,18 @@ public class Test {
 
         System.out.println(app.findStation("cab", line1));
         System.out.println(app.findStation("bac", line2));
+    }
+
+    private static void parseConfigTest(String file) {
+        var lines = new ArrayList<Line>();
+        var stations = new ArrayList<Station>();
+        app.parseConfig(lines, stations, file);
+
+        System.out.println(lines.size());
+        System.out.println(stations.size());
+
+        System.out.println("-------------------");
+        lines.forEach(System.out::println);
+        stations.forEach(x -> System.out.println(x.info()));
     }
 }

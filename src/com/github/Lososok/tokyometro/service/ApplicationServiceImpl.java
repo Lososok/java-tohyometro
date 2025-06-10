@@ -2,11 +2,7 @@ package com.github.Lososok.tokyometro.service;
 
 import com.github.Lososok.tokyometro.model.*;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.nio.Buffer;
+import java.io.*;
 import java.util.*;
 
 public class ApplicationServiceImpl implements ApplicationService {
@@ -32,7 +28,7 @@ public class ApplicationServiceImpl implements ApplicationService {
     }
 
     /// file with structure like:
-    /// <p>lineName-stationName-type:lineName_cross|transferStationName,...,...</p>
+    /// <p>lineName-stationName-type-lineName_cross|transferStationName,...,...</p>
     /// <p>...</p>
     /// <p>num of lines in file == num of unique pair line-station</p>
     public boolean parseConfig(ArrayList<Line> lines, ArrayList<Station> stations, String file) {
@@ -47,17 +43,19 @@ public class ApplicationServiceImpl implements ApplicationService {
             return false;
         }
     }
-    //TODO: test it
+
     private boolean parseStation(ArrayList<Line> lines, ArrayList<Station> stations, String parsLine) {
         String[] split = parsLine.split("[-,]");
         Line line = lines.stream().anyMatch(x -> x.getName().equals(split[0])) ?
                 lines.stream().filter(x -> x.getName().equals(split[0])).findFirst().get() :
                 new Line(split[0]);
-        if (stations.stream().anyMatch(x -> x.getName().equals(split[1]))) return false;
+        if (stations.stream().anyMatch(x -> x.getName().equals(split[1]) && x.getLine().equals(line))) return false;
         // repeating the code, I know
         switch (split[2]) {
             case "NonCrossing":
-                stations.add(new NonCrossingStation(split[1], line));
+                var station = new NonCrossingStation(split[1], line);
+                stations.add(station);
+                line.addStation(station);
                 break;
             case "Crossing":
                 CrossingStation station1 = new CrossingStation(split[1], line);
@@ -69,12 +67,14 @@ public class ApplicationServiceImpl implements ApplicationService {
                     Station crossStation = stations.stream().anyMatch(x -> x.getName().equals(crosses[1])) ?
                             stations.stream().filter(x -> x.getName().equals(crosses[1])).findFirst().get() :
                             null;
-                    if (crossLine == null || crossStation == null || crossStation.getType() != Type.Crossing)
-                        return false;
+                    if (crossLine == null ||
+                            crossStation == null ||
+                            crossStation.getType() != Type.Crossing) return false;
                     station1.addCross(crossStation);
                     ((CrossingStation) crossStation).addCross(station1);
-                    stations.add(station1);
                 }
+                stations.add(station1);
+                line.addStation(station1);
                 break;
             case "Transfer":
                 TransferHub station2 = new TransferHub(split[1], line);
@@ -86,16 +86,19 @@ public class ApplicationServiceImpl implements ApplicationService {
                     Station transferStation = stations.stream().anyMatch(x -> x.getName().equals(transfers[1])) ?
                             stations.stream().filter(x -> x.getName().equals(transfers[1])).findFirst().get() :
                             null;
-                    if (transferLine == null || transferStation == null || transferStation.getType() != Type.Transfer)
-                        return false;
+                    if (transferLine == null ||
+                            transferStation == null ||
+                            transferStation.getType() != Type.Transfer) return false;
                     station2.addTransfer(transferStation, transferLine);
                     ((TransferHub) transferStation).addTransfer(station2, transferLine);
-                    stations.add(station2);
                 }
+                stations.add(station2);
+                line.addStation(station2);
                 break;
             default:
                 return false;
         }
+        if (lines.stream().noneMatch(x -> x.getName().equals(split[0]))) lines.add(line);
         return true;
     }
 }
